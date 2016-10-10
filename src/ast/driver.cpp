@@ -1,6 +1,6 @@
 #include "driver.h"
 
-ContextConsumer::ContextConsumer(Context* context, ASTContext* astContext): context(context), astContext(astContext)
+ContextConsumer::ContextConsumer(Context* context, ASTContext* astContext)
 {
     this->visitor = std::unique_ptr<MyASTVisitor>(new MyASTVisitor(context, astContext));
 }

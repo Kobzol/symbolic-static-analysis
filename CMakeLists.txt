@@ -8,7 +8,7 @@ set(CLANG_DIR "/home/kobzol/libraries/llvm3.8-binaries")
 set(Z3_DIR "/home/kobzol/libraries/z3/build/build")
 
 set(CMAKE_CXX_COMPILER "${CLANG_DIR}/bin/clang++")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti -std=c++11 -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -fno-rtti -Wsign-compare -Wall -pedantic -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS")
 
 include_directories(${CLANG_DIR}/include)
 link_directories(${CLANG_DIR}/lib)
@@ -58,9 +58,13 @@ set(Z3_LIB z3)
 # Project
 add_library(src
     src/context.cpp
-    src/solver.cpp
-    src/driver.cpp
-    src/function.cpp)
+        src/solver/solver.cpp
+        src/ast/driver.cpp
+        src/program/function.cpp
+        src/solver/expr_builder.cpp
+        src/program/path.cpp
+    src/variable/variable.cpp
+    src/variable/int_variable.cpp src/ast/visitor.cpp src/program/declaration.cpp src/util.cpp src/program/evaluator.cpp)
 
 add_executable(clang_test main.cpp)
 target_link_libraries(clang_test src)
@@ -74,7 +78,8 @@ set(TEST_SOURCE_FILES
     test/run_test.cpp
     test/test_solver.cpp
     test/test_variable.cpp
-    test/test_function.cpp)
+    test/test_function.cpp
+)
 
 add_executable(unittest ${TEST_SOURCE_FILES})
 target_link_libraries(unittest src)

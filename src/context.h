@@ -2,7 +2,7 @@
 
 #include <clang/AST/AST.h>
 
-#include "function.h"
+#include "program/function.h"
 
 class Context
 {

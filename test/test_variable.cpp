@@ -1,17 +1,22 @@
+#include <variable/int_variable.h>
 #include "util.h"
 
 TEST_CASE("Variables can be copied") {
     const int val = 5;
 
     Solver s;
-    Variable v1("", clang::QualType(), &s);
-    v1.assignIntConstant(val);
+    ExprBuilder& exp = s.getExprBuilder();
+    IntVariable v1(Declaration("x", NO_TYPE), &exp);
+    v1 = 5;
 
-    REQUIRE(s.isSatisfiable(v1.get_expr() == s.makeInt(val)));
+    s.addConstraint(v1.getExpr());
 
-    Variable v2 = v1;
-    v2.assignIntConstant(val + 1);
+    REQUIRE(s.isSatisfiable(exp.makeInt(v1.getName()) == exp.makeInt(val)));
 
-    REQUIRE_FALSE(s.isSatisfiable(v2.get_expr() == s.makeInt(val)));
-    REQUIRE(s.isSatisfiable(v1.get_expr() == s.makeInt(val)));
+    IntVariable v2(Declaration("y", NO_TYPE), &exp);
+    v2 = val + 1;
+    s.addConstraint(v2.getExpr());
+
+    REQUIRE_FALSE(s.isSatisfiable(exp.makeInt(v2.getName()) == exp.makeInt(val)));
+    REQUIRE(s.isSatisfiable(exp.makeInt(v2.getName()) == exp.makeInt(val + 1)));
 }

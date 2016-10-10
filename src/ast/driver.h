@@ -19,8 +19,6 @@ public:
     bool HandleTopLevelDecl(clang::DeclGroupRef DR) override;
 
 private:
-    Context* context;
-    clang::ASTContext* astContext;
     std::unique_ptr<MyASTVisitor> visitor;
 };
 

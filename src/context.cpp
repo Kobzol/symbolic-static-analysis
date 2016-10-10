@@ -8,13 +8,10 @@ void Context::createFunction(Function* f)
 
 Function* Context::getFunctionByName(std::string name)
 {
-    auto fn = std::find_if(this->functions.begin(), this->functions.end(), [&](Function* &function) {
-        return function->getName() == name;
-    });
-
-    if (fn != this->functions.end())
+    for (Function* fn : this->functions)
     {
-        return *fn;
+        if (fn->getName() == name) return fn;
     }
-    else return nullptr;
+
+    return nullptr;
 }

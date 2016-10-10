@@ -31,6 +31,7 @@ public:
         return this->paths;
     }
 
+    // TODO
     Path* clonePath();
 
 private:

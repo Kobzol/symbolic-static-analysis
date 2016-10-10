@@ -2,42 +2,31 @@
 
 #include <clang/AST/AST.h>
 #include <z3++.h>
-#include <cstdint>
 
-#include "../declaration.h"
-#include "../solver.h"
+#include "solver/expr_builder.h"
+#include "program/declaration.h"
 
 class Variable
 {
 public:
-    Variable(std::string name, clang::QualType type, Solver* solver):
-            name(name), type(type), solver(solver), expr(solver->makeExpr())
-    {
+    Variable(const Declaration& dec, ExprBuilder* builder);
 
-    }
+    z3::expr& getExpr();
+    std::string getName();
+    clang::QualType getType();
 
-    Variable(const Declaration& dec, Solver* solver):
-            name(dec.getName()), type(dec.getType()), solver(solver), expr(solver->makeExpr())
-    {
+    virtual void assignVariable(Variable* var);
+    virtual Variable* clone() = 0;
 
-    }
+protected:
+    virtual z3::expr createDefaultExpr() = 0;
 
-    void assignIntConstant(int value)
-    {
-        this->expr = this->solver->makeInt(value);
-    }
-    void assignIntVariable(Variable* var)
-    {
-        this->expr = var->expr;
-    }
+    ExprBuilder* getBuilder();
+    void setExpr(const z3::expr& e);
 
-    z3::expr& get_expr()
-    {
-        return this->expr;
-    }
-
+private:
+    ExprBuilder* builder;
     z3::expr expr;
-    Solver* solver;
     std::string name;
     clang::QualType type;
 };
