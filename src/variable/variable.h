@@ -16,7 +16,7 @@ public:
     clang::QualType getType();
 
     virtual void assignVariable(Variable* var);
-    virtual Variable* clone() = 0;
+    virtual std::unique_ptr<Variable> clone() = 0;
 
 protected:
     virtual z3::expr createDefaultExpr() = 0;

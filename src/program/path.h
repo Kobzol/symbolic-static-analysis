@@ -8,17 +8,19 @@
 class Path
 {
 public:
+    Path();
+
+    Path(const Path& rhs);
+    Path& operator=(const Path& rhs);
+
     Solver& getSolver();
 
     Variable* addVariable(std::string name, clang::QualType type);
-    Variable* addVariable(Variable* var);
+    void addVariable(std::unique_ptr<Variable> var);
 
     Variable* getVariableByName(std::string name);
-    Variable* createConstant();
-
-    Path* clone();
 
 private:
-    std::vector<Variable*> variables;
+    std::vector<std::unique_ptr<Variable>> variables;
     Solver solver;
 };

@@ -8,7 +8,7 @@ int f(int par1, bool par2)
 )";
 
 TEST_CASE("Functions are correctly registered") {
-    Context* ctx = testCode(p1);
+    std::unique_ptr<Context> ctx = testCode(p1);
     Function* f = ctx->getFunctionByName("f");
 
     REQUIRE(f != nullptr);

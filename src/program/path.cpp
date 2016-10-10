@@ -3,6 +3,29 @@
 #include "util.h"
 #include "variable/int_variable.h"
 
+Path::Path()
+{
+
+}
+Path::Path(const Path &rhs)
+{
+    for (auto& var : rhs.variables)
+    {
+        this->variables.push_back(std::unique_ptr<Variable>(var->clone()));
+    }
+    this->solver = rhs.solver;
+}
+Path& Path::operator=(const Path &rhs)
+{
+    for (auto& var : rhs.variables)
+    {
+        this->variables.push_back(std::unique_ptr<Variable>(var->clone()));
+    }
+    this->solver = rhs.solver;
+
+    return *this;
+}
+
 Solver& Path::getSolver()
 {
     return this->solver;
@@ -11,47 +34,33 @@ Solver& Path::getSolver()
 Variable* Path::addVariable(std::string name, clang::QualType type)
 {
     std::string typeName = Util::stripType(type).getAsString();
-    Variable* var = nullptr;
+    std::unique_ptr<Variable> var;
 
     if (typeName == "int")
     {
-        var = new IntVariable(Declaration(name, type), &this->solver.getExprBuilder());
+        var = std::make_unique<IntVariable>(Declaration(name, type), &this->solver.getExprBuilder());
     }
 
-    if (var != nullptr)
+    Variable* ptr = nullptr;
+    if (var.get() != nullptr)
     {
-        return this->addVariable(var);
+        ptr = var.get();
+        this->addVariable(std::move(var));
     }
 
-    return nullptr;
+    return ptr;
 }
-Variable* Path::addVariable(Variable* var)
+void Path::addVariable(std::unique_ptr<Variable> var)
 {
-    this->variables.push_back(var);
-    return var;
+    this->variables.push_back(std::move(var));
 }
 
 Variable* Path::getVariableByName(std::string name)
 {
-    for (Variable* var : this->variables)
+    for (auto& var : this->variables)
     {
-        if (var->getName() == name) return var;
+        if (var->getName() == name) return var.get();
     }
 
     return nullptr;
-}
-Variable* Path::createConstant()
-{
-    return new IntVariable(Declaration("", clang::QualType()), &this->solver.getExprBuilder());
-}
-
-Path* Path::clone()
-{
-    Path* newPath = new Path();
-    for (Variable* var : this->variables)
-    {
-        newPath->addVariable(var->clone());
-    }
-    newPath->solver = this->solver;
-    return newPath;
 }

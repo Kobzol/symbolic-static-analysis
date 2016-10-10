@@ -10,35 +10,16 @@ class Function
 public:
     Function(std::string name, clang::QualType returnType, std::vector<Declaration> parameters);
 
-    std::string getName()
-    {
-        return this->name;
-    }
-    clang::QualType getReturnType()
-    {
-        return this->returnType;
-    }
-    std::vector<Declaration>& getParameters()
-    {
-        return this->parameters;
-    }
-    Path* getActivePath()
-    {
-        return this->activePath;
-    }
-    std::vector<Path*>& getPaths()
-    {
-        return this->paths;
-    }
-
-    // TODO
-    Path* clonePath();
+    std::string getName();
+    clang::QualType getReturnType();
+    std::vector<Declaration>& getParameters();
+    Path* getActivePath();
 
 private:
     std::string name;
     clang::QualType returnType;
     std::vector<Declaration> parameters;
 
-    std::vector<Path*> paths;
-    Path* activePath = nullptr;
+    size_t activePath = 0;
+    std::vector<std::unique_ptr<Path>> paths;
 };

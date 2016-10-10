@@ -7,26 +7,16 @@
 class Context
 {
 public:
-    void createFunction(Function* f);
+    void addFunction(std::unique_ptr<Function> f);
 
-    clang::ASTContext* getASTContext()
-    {
-        return this->astContext;
-    }
-    void setASTContext(clang::ASTContext* ctx)
-    {
-        this->astContext = ctx;
-    }
+    clang::ASTContext* getASTContext();
+    void setASTContext(clang::ASTContext* ctx);
 
-    Function* getActiveFunction()
-    {
-        return this->activeFunction;
-    }
-
+    Function* getActiveFunction();
     Function* getFunctionByName(std::string name);
 
 private:
-    Function* activeFunction;
-    std::vector<Function*> functions;
+    size_t activeFunction = 0;
+    std::vector<std::unique_ptr<Function>> functions;
     clang::ASTContext* astContext;
 };

@@ -36,11 +36,11 @@ class ASTFactory: public clang::tooling::FrontendActionFactory {
 public:
     ASTFactory(Context* context);
 
-    clang::ASTFrontendAction *create() override;
+    clang::ASTFrontendAction* create() override;
 
 private:
     Context* context;
 };
 
-Context* runOnString(std::string code);
-Context* runFromCmd(int argc, const char** argv);
+std::unique_ptr<Context> runOnString(const std::string& code);
+std::unique_ptr<Context> runFromCmd(int argc, const char** argv);

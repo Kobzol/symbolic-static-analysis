@@ -7,7 +7,7 @@ class IntVariable : public Variable
 public:
     IntVariable(const Declaration &dec, ExprBuilder *builder);
 
-    virtual Variable *clone() override;
+    virtual std::unique_ptr<Variable> clone() override;
 
     IntVariable& operator=(int rhs);
 

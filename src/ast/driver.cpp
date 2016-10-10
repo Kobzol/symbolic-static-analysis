@@ -2,14 +2,14 @@
 
 ContextConsumer::ContextConsumer(Context* context, ASTContext* astContext)
 {
-    this->visitor = std::unique_ptr<MyASTVisitor>(new MyASTVisitor(context, astContext));
+    this->visitor = std::make_unique<MyASTVisitor>(context, astContext);
 }
 
 bool ContextConsumer::HandleTopLevelDecl(DeclGroupRef DR)
 {
-    for (DeclGroupRef::iterator b = DR.begin(), e = DR.end(); b != e; ++b)
+    for (auto decl : DR)
     {
-        this->visitor->TraverseDecl(*b);
+        this->visitor->TraverseDecl(decl);
         //(*b)->dump();
     }
 
@@ -24,7 +24,7 @@ ContextFrontendAction::ContextFrontendAction(Context* context) : context(context
 std::unique_ptr<clang::ASTConsumer> ContextFrontendAction::CreateASTConsumer(clang::CompilerInstance &compiler,
                                                                       clang::StringRef file)
 {
-    return llvm::make_unique<ContextConsumer>(this->context, &compiler.getASTContext());
+    return std::make_unique<ContextConsumer>(this->context, &compiler.getASTContext());
 }
 
 ASTFactory::ASTFactory(Context* context): context(context)
@@ -37,20 +37,20 @@ clang::ASTFrontendAction* ASTFactory::create()
     return new ContextFrontendAction(this->context);
 }
 
-Context* runOnString(std::string code)
+std::unique_ptr<Context> runOnString(const std::string& code)
 {
-    Context* ctx = new Context();
-    clang::tooling::runToolOnCode(new ContextFrontendAction(ctx), code);
+    auto ctx = std::make_unique<Context>();
+    clang::tooling::runToolOnCode(new ContextFrontendAction(ctx.get()), code);
     return ctx;
 }
 
-Context* runFromCmd(int argc, const char **argv)
+std::unique_ptr<Context> runFromCmd(int argc, const char **argv)
 {
-    llvm::cl::OptionCategory ToolingSampleCategory("Symbolic tool");
-    clang::tooling::CommonOptionsParser op(argc, argv, ToolingSampleCategory);
-    clang::tooling::ClangTool Tool(op.getCompilations(), op.getSourcePathList());
+    llvm::cl::OptionCategory toolingSampleCategory("Symbolic tool");
+    clang::tooling::CommonOptionsParser op(argc, argv, toolingSampleCategory);
+    clang::tooling::ClangTool tool(op.getCompilations(), op.getSourcePathList());
 
-    Context* ctx = new Context();
-    Tool.run(std::unique_ptr<ASTFactory>(new ASTFactory(ctx)).get());
+    auto ctx = std::make_unique<Context>();
+    tool.run(std::make_unique<ASTFactory>(ctx.get()).get());
     return ctx;
 }

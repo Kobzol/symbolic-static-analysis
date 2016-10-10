@@ -22,5 +22,5 @@ private:
     Path* getActivePath();
 
     Context* ctx;
-    Evaluator* evaluator;
+    std::unique_ptr<Evaluator> evaluator;
 };

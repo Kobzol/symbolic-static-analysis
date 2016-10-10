@@ -10,9 +10,9 @@ z3::expr IntVariable::createDefaultExpr()
     return this->getBuilder()->makeInt(this->getName());
 }
 
-Variable* IntVariable::clone()
+std::unique_ptr<Variable> IntVariable::clone()
 {
-    return new IntVariable(Declaration(this->getName(), this->getType()), this->getBuilder());
+    return std::make_unique<IntVariable>(Declaration(this->getName(), this->getType()), this->getBuilder());
 }
 
 IntVariable& IntVariable::operator=(int rhs)

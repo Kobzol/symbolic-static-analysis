@@ -1,10 +1,10 @@
 #include "visitor.h"
 #include "util.h"
 
-MyASTVisitor::MyASTVisitor(Context *context, ASTContext *astContext): ctx(context)
+MyASTVisitor::MyASTVisitor(Context* context, ASTContext *astContext): ctx(context)
 {
     this->ctx->setASTContext(astContext);
-    this->evaluator = new Evaluator(this->ctx);
+    this->evaluator = std::make_unique<Evaluator>(this->ctx);
 }
 
 bool MyASTVisitor::VisitFunctionDecl(FunctionDecl *f)
@@ -19,12 +19,12 @@ bool MyASTVisitor::VisitFunctionDecl(FunctionDecl *f)
             parameters.push_back(Declaration(par->getNameAsString(), par->getType()));
         }
 
-        Function* fn = new Function(
+        auto fn = std::make_unique<Function>(
                 f->getNameInfo().getName().getAsString(),
                 f->getReturnType(),
                 parameters
         );
-        this->ctx->createFunction(fn);
+        this->ctx->addFunction(std::move(fn));
     }
 
     return true;

@@ -58,13 +58,18 @@ set(Z3_LIB z3)
 # Project
 add_library(src
     src/context.cpp
-        src/solver/solver.cpp
-        src/ast/driver.cpp
-        src/program/function.cpp
-        src/solver/expr_builder.cpp
-        src/program/path.cpp
+    src/util.cpp
+    src/ast/driver.cpp
+    src/ast/visitor.cpp
+    src/program/declaration.cpp
+    src/program/evaluator.cpp
+    src/program/function.cpp
+    src/program/path.cpp
+    src/solver/expr_builder.cpp
+    src/solver/solver.cpp
     src/variable/variable.cpp
-    src/variable/int_variable.cpp src/ast/visitor.cpp src/program/declaration.cpp src/util.cpp src/program/evaluator.cpp)
+    src/variable/int_variable.cpp
+)
 
 add_executable(clang_test main.cpp)
 target_link_libraries(clang_test src)
@@ -79,7 +84,7 @@ set(TEST_SOURCE_FILES
     test/test_solver.cpp
     test/test_variable.cpp
     test/test_function.cpp
-)
+    test/test_path.cpp)
 
 add_executable(unittest ${TEST_SOURCE_FILES})
 target_link_libraries(unittest src)

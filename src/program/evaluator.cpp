@@ -2,7 +2,7 @@
 
 #include "util.h"
 
-Evaluator::Evaluator(Context *context): ctx(context)
+Evaluator::Evaluator(Context* context): ctx(context)
 {
 
 }
@@ -13,7 +13,7 @@ Variable *Evaluator::getVarFromExpr(clang::Expr *e, Path *path)
 
     if (clang::isa<clang::IntegerLiteral>(e))
     {
-        var = path->createConstant();
+        //var = path->createConstant(); TODO
         //var->assignIntConstant(this->getAsInt(e));
     }
     else if (clang::isa<clang::DeclRefExpr>(e))
