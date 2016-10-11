@@ -1,19 +1,20 @@
 #include "evaluator.h"
 
-#include "util.h"
+#include "util/util.h"
+#include "variable/int_variable.h"
 
 Evaluator::Evaluator(Context* context): ctx(context)
 {
 
 }
 
-Variable *Evaluator::getVarFromExpr(clang::Expr *e, Path *path)
+Variable* Evaluator::getVarFromExpr(clang::Expr *e, Path *path)
 {
-    Variable* var = nullptr;
+    Variable* var;
 
     if (clang::isa<clang::IntegerLiteral>(e))
     {
-        //var = path->createConstant(); TODO
+        //var = IntVariable::createConstant();
         //var->assignIntConstant(this->getAsInt(e));
     }
     else if (clang::isa<clang::DeclRefExpr>(e))

@@ -5,6 +5,8 @@
 class IntVariable : public Variable
 {
 public:
+    static std::unique_ptr<IntVariable> createConstant(int value, ExprBuilder* builder);
+
     IntVariable(const Declaration &dec, ExprBuilder *builder);
 
     virtual std::unique_ptr<Variable> clone() override;

@@ -4,7 +4,7 @@ project(clang_test)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
-set(CLANG_DIR "/home/kobzol/libraries/llvm3.8-binaries")
+set(CLANG_DIR "/home/kobzol/libraries/llvm3.9-binaries")
 set(Z3_DIR "/home/kobzol/libraries/z3/build/build")
 
 set(CMAKE_CXX_COMPILER "${CLANG_DIR}/bin/clang++")
@@ -36,6 +36,7 @@ set(CLANG_LIB
     LLVMX86Info # MC, Support, Target
     LLVMX86Utils # Core, Support
     LLVMipo
+    LLVMProfileData
     LLVMScalarOpts
     LLVMInstCombine
     LLVMTransformUtils
@@ -58,7 +59,6 @@ set(Z3_LIB z3)
 # Project
 add_library(src
     src/context.cpp
-    src/util.cpp
     src/ast/driver.cpp
     src/ast/visitor.cpp
     src/program/declaration.cpp
@@ -69,7 +69,8 @@ add_library(src
     src/solver/solver.cpp
     src/variable/variable.cpp
     src/variable/int_variable.cpp
-)
+    src/util/types.cpp
+    src/util/util.cpp)
 
 add_executable(clang_test main.cpp)
 target_link_libraries(clang_test src)

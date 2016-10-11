@@ -1,5 +1,5 @@
 #include "visitor.h"
-#include "util.h"
+#include "util/util.h"
 
 MyASTVisitor::MyASTVisitor(Context* context, ASTContext *astContext): ctx(context)
 {
@@ -42,7 +42,7 @@ bool MyASTVisitor::VisitVarDecl(VarDecl *decl)
 
     if (var != nullptr && e != nullptr)
     {
-        var->assignVariable(this->evaluator->getVarFromExpr(e, this->getActivePath()));
+        var->assign(this->evaluator->getVarFromExpr(e, this->getActivePath()));
     }
 
     return true;
@@ -57,7 +57,7 @@ bool MyASTVisitor::TraverseIfStmt(IfStmt *stmt)
 
     if (path->getSolver().isSatisfiable(condition))
     {
-        //Path* sat = path->clone();
+        std::unique_ptr<Path> satPath = std::make_unique<Path>(*path);
         RecursiveASTVisitor<MyASTVisitor>::TraverseStmt(stmt->getThen());
     }
     if (path->getSolver().isSatisfiable(condition == path->getSolver().getExprBuilder().makeBool(false)))

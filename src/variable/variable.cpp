@@ -18,7 +18,7 @@ clang::QualType Variable::getType()
     return this->type;
 }
 
-void Variable::assignVariable(Variable *var)
+void Variable::assign(Variable *var)
 {
     this->setExpr(var->getExpr());
 }

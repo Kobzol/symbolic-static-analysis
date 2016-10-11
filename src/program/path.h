@@ -13,6 +13,8 @@ public:
     Path(const Path& rhs);
     Path& operator=(const Path& rhs);
 
+    bool operator==(const Path& rhs);
+
     Solver& getSolver();
 
     Variable* addVariable(std::string name, clang::QualType type);

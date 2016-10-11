@@ -1,6 +1,7 @@
 #include "path.h"
 
-#include "util.h"
+#include "util/util.h"
+#include "util/types.h"
 #include "variable/int_variable.h"
 
 Path::Path()
@@ -26,6 +27,11 @@ Path& Path::operator=(const Path &rhs)
     return *this;
 }
 
+bool Path::operator==(const Path &rhs)
+{
+    return false;
+}
+
 Solver& Path::getSolver()
 {
     return this->solver;
@@ -33,10 +39,9 @@ Solver& Path::getSolver()
 
 Variable* Path::addVariable(std::string name, clang::QualType type)
 {
-    std::string typeName = Util::stripType(type).getAsString();
     std::unique_ptr<Variable> var;
 
-    if (typeName == "int")
+    if (Types::isInt(type))
     {
         var = std::make_unique<IntVariable>(Declaration(name, type), &this->solver.getExprBuilder());
     }

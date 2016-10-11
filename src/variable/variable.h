@@ -15,7 +15,7 @@ public:
     std::string getName();
     clang::QualType getType();
 
-    virtual void assignVariable(Variable* var);
+    virtual void assign(Variable* var);
     virtual std::unique_ptr<Variable> clone() = 0;
 
 protected:

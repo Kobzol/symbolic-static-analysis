@@ -1,6 +1,6 @@
 #include "util.h"
 
-#include "solver/solver.h"
+#include "util/types.h"
 #include "variable/int_variable.h"
 
 TEST_CASE("Solvers can be copied") {
@@ -19,12 +19,12 @@ TEST_CASE("Solvers can substitute variables") {
     Solver s;
     ExprBuilder e(s.getContext());
 
-    IntVariable v(Declaration("x", INT_TYPE), &e);
+    IntVariable v(Declaration("x", Types::Int()), &e);
     s.addConstraint(v.getExpr() > 5);
 
     REQUIRE(s.isSatisfiable());
 
-    IntVariable sub(Declaration("x", INT_TYPE), &e);
+    IntVariable sub(Declaration("x", Types::Int()), &e);
     sub = 6;
     Solver s1 = s.substitute(v.getName(), sub.getExpr());
     REQUIRE(s1.isSatisfiable());

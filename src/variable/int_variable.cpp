@@ -1,3 +1,4 @@
+#include <util/types.h>
 #include "int_variable.h"
 
 IntVariable::IntVariable(const Declaration &dec, ExprBuilder *builder): Variable(dec, builder)
@@ -19,4 +20,11 @@ IntVariable& IntVariable::operator=(int rhs)
 {
     this->setExpr(this->getBuilder()->makeInt(this->getName()) == this->getBuilder()->makeInt(rhs));
     return *this;
+}
+
+std::unique_ptr<IntVariable> IntVariable::createConstant(int value, ExprBuilder* builder)
+{
+    std::unique_ptr<IntVariable> var = std::make_unique<IntVariable>(Declaration("IntConstant_" + std::to_string(value), Types::Int()), builder);
+    *var = value;
+    return var;
 }
