@@ -1,3 +1,4 @@
+#include <memory>
 #include <ast/driver.h>
 
 int main(int argc, const char** argv)

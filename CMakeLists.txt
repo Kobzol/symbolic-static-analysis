@@ -30,6 +30,7 @@ set(CLANG_LIB
     clangEdit
     clangLex
     clangTooling
+    clangCodeGen
     LLVMX86AsmParser # MC, MCParser, Support, X86Desc, X86Info
     LLVMX86Desc # MC, Support, X86AsmPrinter, X86Info
     LLVMX86AsmPrinter # MC, Support, X86Utils

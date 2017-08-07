@@ -1,4 +1,5 @@
 #include "driver.h"
+#include <clang/CodeGen/ModuleBuilder.h>
 
 ContextConsumer::ContextConsumer(Context* context, ASTContext* astContext)
 {
@@ -24,6 +25,8 @@ ContextFrontendAction::ContextFrontendAction(Context* context) : context(context
 std::unique_ptr<clang::ASTConsumer> ContextFrontendAction::CreateASTConsumer(clang::CompilerInstance &compiler,
                                                                       clang::StringRef file)
 {
+    clang::ASTContext& ctx = compiler.getASTContext();
+
     return std::make_unique<ContextConsumer>(this->context, &compiler.getASTContext());
 }
 
@@ -44,7 +47,7 @@ std::unique_ptr<Context> runOnString(const std::string& code)
     return ctx;
 }
 
-std::unique_ptr<Context> runFromCmd(int argc, const char **argv)
+std::unique_ptr<Context> runFromCmd(int argc, const char** argv)
 {
     llvm::cl::OptionCategory toolingSampleCategory("Symbolic tool");
     clang::tooling::CommonOptionsParser op(argc, argv, toolingSampleCategory);
